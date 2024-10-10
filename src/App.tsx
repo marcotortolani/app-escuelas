@@ -19,6 +19,7 @@ import {
   WifiOff,
   XSquare,
   SendHorizontal,
+  CalendarCheck,
 } from 'lucide-react'
 
 //import { SchoolInitialState } from './store/AppStore'
@@ -209,8 +210,7 @@ function App() {
           showSyncSection,
           setShowSyncSection,
           schools,
-          schoolSelected,
-          setSchoolSelected,
+          isOnline,
         }}
       />
     </main>
@@ -223,10 +223,12 @@ const SyncSection = ({
   showSyncSection,
   setShowSyncSection,
   schools,
+  isOnline,
 }: {
   showSyncSection: boolean
   setShowSyncSection: React.Dispatch<React.SetStateAction<boolean>>
   schools: DataSchool[]
+  isOnline: boolean
 }) => {
   const [schoolSync, setSchoolSync] = useState('')
   const [dateSync, setDateSync] = useState('')
@@ -258,6 +260,10 @@ const SyncSection = ({
     console.log('Send Data')
   }
 
+  // useEffect(() => {
+
+  // }, [isOnline]);
+
   return (
     <section
       className={`${
@@ -269,61 +275,77 @@ const SyncSection = ({
       </h2>
 
       <div className=" w-full max-w-[500px] px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
-        <label htmlFor="tel" className="w-full flex items-center gap-2">
-          <School className="h-4 w-4 text-neutral-800" />
-          <span className=" text-neutral-800">Escuela</span>
-        </label>
-        <Select
-          onValueChange={(value) => setSchoolSync(value)}
-          value={schoolSync?.length ? schoolSync : ''}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue
-              placeholder={'Seleccione una escuela'}
-              className="w-[180px]"
-            />
-          </SelectTrigger>
-          <SelectContent>
-            {schools.map((school, index) => (
-              <SelectItem key={index} value={school.name}>
-                {school.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          onValueChange={(value) => {
-            setDateSync(value)
-            setNumColSync(
-              schools
-                .filter((school) => school.name === schoolSync)
-                .map((school) => school.data)
-                .flat()
-                .filter((school) => school.date === value)[0]?.numbersCollected
-            )
-          }}
-          value={dateSync?.length ? dateSync : ''}
-          disabled={!schoolSync?.length}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue
-              placeholder={'Seleccione el día'}
-              className="w-[180px]"
-            />
-          </SelectTrigger>
-          <SelectContent>
-            {schools
-              ?.filter((school) => school.name === schoolSync)
-              .map((school) => school.data)
-              .flat()
-              .map((school, index) => (
-                <SelectItem key={index} value={school.date}>
-                  {school.date}
+        <div className="w-full ">
+          <label
+            htmlFor="school"
+            className="w-full mb-2 flex items-center gap-2"
+          >
+            <School className="h-4 w-4 text-neutral-800" />
+            <span className=" text-neutral-800">Escuela</span>
+          </label>
+          <Select
+            onValueChange={(value) => {
+              setSchoolSync(value)
+              setDateSync('')
+              setNumColSync([])
+            }}
+            value={schoolSync?.length ? schoolSync : ''}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue
+                placeholder={'Seleccione una escuela'}
+                className="w-[180px]"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {schools.map((school, index) => (
+                <SelectItem key={index} value={school.name}>
+                  {school.name}
                 </SelectItem>
               ))}
-          </SelectContent>
-        </Select>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className=" w-full">
+          <label htmlFor="date" className="w-full mb-2 flex items-center gap-2">
+            <CalendarCheck className="h-4 w-4 text-neutral-800" />
+            <span className=" text-neutral-800">Fecha cargada</span>
+          </label>
+          <Select
+            onValueChange={(value) => {
+              setDateSync(value)
+              setNumColSync(
+                schools
+                  .filter((school) => school.name === schoolSync)
+                  .map((school) => school.data)
+                  .flat()
+                  .filter((school) => school.date === value)[0]
+                  ?.numbersCollected
+              )
+            }}
+            value={dateSync?.length ? dateSync : ''}
+            disabled={!schoolSync?.length}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue
+                placeholder={'Seleccione el día'}
+                className="w-[180px]"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {schools
+                ?.filter((school) => school.name === schoolSync)
+                .map((school) => school.data)
+                .flat()
+                .map((school, index) => (
+                  <SelectItem key={index} value={school.date}>
+                    {school.date}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className=" w-full max-w-[500px]  flex items-center justify-between ">
@@ -335,19 +357,28 @@ const SyncSection = ({
           <XSquare className={` text-white h-4 w-4 mr-2`} />
           Cerrar/Cancelar
         </Button>
-        <Button
-          variant="default"
-          onClick={handleSendData}
-          disabled={numColSync.length === 0}
-          className=" z-50  bg-sky-200 text-neutral-800 hover:bg-sky-400 disabled:bg-neutral-400 disabled:text-neutral-600"
-        >
-          {numColSync.length === 0 ? 'No hay datos' : 'Enviar Datos'}
-          <SendHorizontal
-            className={`${
-              numColSync.length === 0 && 'hidden'
-            } text-neutral-800 h-4 w-4 ml-2`}
-          />
-        </Button>
+        {isOnline ? (
+          <Button
+            variant="default"
+            onClick={handleSendData}
+            disabled={numColSync.length === 0}
+            className=" z-50  bg-sky-200 text-neutral-800 hover:bg-sky-400 disabled:bg-neutral-400 disabled:text-neutral-600"
+          >
+            {numColSync.length === 0 ? 'No hay datos' : 'Enviar Datos'}
+            <SendHorizontal
+              className={`${
+                numColSync.length === 0 && 'hidden'
+              } text-neutral-800 h-4 w-4 ml-2`}
+            />
+          </Button>
+        ) : (
+          <div className=" bg-neutral-400 text-neutral-800 select-none px-6 p-2 flex items-center gap-4 rounded-md">
+            <WifiOff
+              className={` text-neutral-800 h-4 w-4`}
+            />
+            Sin internet
+          </div>
+        )}
       </div>
     </section>
   )
