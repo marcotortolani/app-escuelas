@@ -21,22 +21,24 @@ import {
   SendHorizontal,
 } from 'lucide-react'
 
-import { SchoolInitialState } from './store/AppStore'
+//import { SchoolInitialState } from './store/AppStore'
 
 function App() {
   const { schools, setSchoolName } = useStore()
   const addNumberCollected = useStore((state) => state.addNumberCollected)
   const [newSchool, setNewSchool] = useState('')
-  const [showInputSchool, setShowInputSchool] = useState(false)
+  //const [showInputSchool, setShowInputSchool] = useState(false)
   const [schoolSelected, setSchoolSelected] = useState('')
   const [phoneInput, setPhoneInput] = useState('')
   const [showSyncSection, setShowSyncSection] = useState(false)
   const { isOnline } = useNetworkStatus()
-  const actualDate = new Date().toLocaleDateString('es-ES', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+  // const actualDate = new Date().toLocaleDateString('es-ES', {
+  //   day: 'numeric',
+  //   month: 'long',
+  //   year: 'numeric',
+  // })
+
+  
 
   const handleAddNumber = (name: string, number: string) => {
     //setSchoolName(name) // Configura la escuela
@@ -51,12 +53,12 @@ function App() {
   // console.log(schools.length)
   // console.log(schools.find((school) => school.name === schoolSelected)?.data)
   //console.log(schools)
-  console.log(schoolSelected)
+  //console.log(schoolSelected)
 
-  function handleSelect(value: string) {
-    // setSchoolName(value)
-    console.log(value)
-  }
+  // function handleSelect(value: string) {
+  //   // setSchoolName(value)
+  //   console.log(value)
+  // }
 
   useEffect(() => {
     if (schools?.length) {
@@ -102,7 +104,7 @@ function App() {
                 <SelectItem
                   value="new-school"
                   className="text-neutral-500"
-                  onClick={() => setShowInputSchool(true)}
+                  // onClick={() => setShowInputSchool(true)}
                 >
                   Ingresar nueva escuela
                 </SelectItem>
