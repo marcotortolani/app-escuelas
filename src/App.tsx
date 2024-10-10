@@ -38,8 +38,6 @@ function App() {
   //   year: 'numeric',
   // })
 
-  
-
   const handleAddNumber = (name: string, number: string) => {
     //setSchoolName(name) // Configura la escuela
     addNumberCollected(name, number) // Agrega el número
@@ -50,7 +48,20 @@ function App() {
     setSchoolName(name)
   }
 
-  // console.log(schools.length)
+  console.log(schools[0])
+  // const data = {
+  //   name: 'Escuela 01',
+  //   data: [
+  //     {
+  //       date: '01-12-2024',
+  //       numbersCollected: ['123456789', '987654321'],
+  //     },
+  //     {
+  //       date: '02-12-2024',
+  //       numbersCollected: ['123456789', '987654321'],
+  //     },
+  //   ],
+  // }
   // console.log(schools.find((school) => school.name === schoolSelected)?.data)
   //console.log(schools)
   //console.log(schoolSelected)
@@ -67,7 +78,7 @@ function App() {
   }, [])
 
   return (
-    <main className="relative w-screen h-screen min-h-fit px-4 py-8 flex flex-col items-center justify-center gap-10 bg-neutral-800 overflow-hidden">
+    <main className="relative w-screen h-[100dvh] min-h-fit px-4 py-8 flex flex-col items-center justify-center gap-10 bg-neutral-800 overflow-hidden">
       <h1 className="text-3xl text-white uppercase font-medium tracking-wider">
         Escuelas
       </h1>
@@ -167,7 +178,7 @@ function App() {
             disabled={!isOnline}
             variant="default"
             onClick={() => setShowSyncSection(true)}
-            className=" z-50 w-full bg-sky-700 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
+            className=" z-50 w-full bg-sky-700 text-white hover:bg-sky-800 disabled:bg-neutral-400 disabled:text-neutral-600"
           >
             <RefreshCcw
               className={`${
@@ -251,7 +262,7 @@ const SyncSection = ({
         Sincronización de datos
       </h2>
 
-      <div className=" w-full px-4 max-w-[500px]  py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
+      <div className=" w-full max-w-[500px] px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
         <label htmlFor="tel" className="w-full flex items-center gap-2">
           <School className="h-4 w-4 text-neutral-800" />
           <span className=" text-neutral-800">Escuela</span>
@@ -309,7 +320,7 @@ const SyncSection = ({
         </Select>
       </div>
 
-      <div className=" w-full max-h-[500px]  flex items-center justify-between ">
+      <div className=" w-full max-w-[500px]  flex items-center justify-between ">
         <Button
           variant="default"
           onClick={() => setShowSyncSection(false)}
@@ -322,7 +333,7 @@ const SyncSection = ({
           variant="default"
           onClick={() => setShowSyncSection(false)}
           disabled={numColSync.length === 0}
-          className=" z-50  bg-sky-200 text-neutral-800 disabled:bg-neutral-400 disabled:text-neutral-600"
+          className=" z-50  bg-sky-200 text-neutral-800 hover:bg-sky-400 disabled:bg-neutral-400 disabled:text-neutral-600"
         >
           {numColSync.length === 0 ? 'No hay datos' : 'Enviar Datos'}
           <SendHorizontal
