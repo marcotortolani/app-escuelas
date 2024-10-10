@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input'
 
 import {
   PhoneIcon,
-  //School,
+  School,
   RefreshCcw,
   WifiOff,
   XSquare,
@@ -27,7 +27,7 @@ import {
 function App() {
   const { schools, setSchoolName } = useStore()
   const addNumberCollected = useStore((state) => state.addNumberCollected)
-  //const [newSchool, setNewSchool] = useState('')
+  const [newSchool, setNewSchool] = useState('')
   //const [showInputSchool, setShowInputSchool] = useState(false)
   const [schoolSelected, setSchoolSelected] = useState('')
   const [phoneInput, setPhoneInput] = useState('')
@@ -40,16 +40,16 @@ function App() {
   // })
 
   const handleAddNumber = (name: string, number: string) => {
-    setSchoolName('Escuela') // Configura la escuela
-    addNumberCollected('Escuela', number) // Agrega el número
+    //setSchoolName(name) // Configura la escuela
+    addNumberCollected(name, number) // Agrega el número
     setPhoneInput('')
   }
 
-  // const handleAddSchoolName = (name: string) => {
-  //   setSchoolName(name)
-  // }
+  const handleAddSchoolName = (name: string) => {
+    setSchoolName(name)
+  }
 
-  // console.log(schools[0])
+  console.log(schools[0])
   // const data = {
   //   name: 'Escuela 01',
   //   data: [
@@ -81,11 +81,11 @@ function App() {
   return (
     <main className="relative w-screen h-[100dvh] min-h-fit px-4 py-8 flex flex-col items-center justify-center gap-10 bg-neutral-800 overflow-hidden">
       <h1 className="text-3xl text-white uppercase font-medium tracking-wider">
-        Escuela
+        Escuelas
       </h1>
       <section className="w-full h-4/5 min-h-fit max-h-[500px] flex flex-col items-center justify-evenly gap-4">
-        <div className=" w-full px-4 max-w-[400px]  py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
-          {/* <div className=" w-full flex flex-col items-center gap-4">
+        <div className=" w-full px-4 max-w-[500px]  py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
+          <div className=" w-full flex flex-col items-center gap-4">
             <label htmlFor="tel" className="w-full flex items-center gap-2">
               <School className="h-4 w-4 text-neutral-800" />
               <span className=" text-neutral-800">Escuela</span>
@@ -148,15 +148,15 @@ function App() {
                 Agregar
               </Button>
             </div>
-          </div> */}
+          </div>
 
-          {/* <div className=" w-5/6 mx-auto h-0.5 bg-neutral-600/30 rounded-full"></div> */}
+          <div className=" w-5/6 mx-auto h-0.5 bg-neutral-600/30 rounded-full"></div>
           <div className="w-full flex flex-col items-start gap-2">
             <label htmlFor="tel" className="flex items-center gap-2">
               <PhoneIcon className="h-4 w-4 text-neutral-800" />
-              <span className=" text-neutral-800">Ingrese nuevo Teléfono</span>
+              <span className=" text-neutral-800">Teléfono</span>
             </label>
-            <div className=" w-full flex flex-col gap-10  items-center justify-between ">
+            <div className=" w-full flex items-center justify-between gap-4">
               <Input
                 type="tel"
                 id="tel"
@@ -167,7 +167,7 @@ function App() {
               />
               <Button
                 variant="default"
-                className="w-1/2 bg-lime-600 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
+                className=" bg-lime-600 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
                 disabled={!phoneInput}
                 onClick={() => handleAddNumber(schoolSelected, phoneInput)}
               >
@@ -230,77 +230,39 @@ const SyncSection = ({
   schools: DataSchool[]
   isOnline: boolean
 }) => {
-  //const [schoolSync, setSchoolSync] = useState('Escuela')
+  const [schoolSync, setSchoolSync] = useState('')
   const [dateSync, setDateSync] = useState('')
   const [numColSync, setNumColSync] = useState<string[]>([])
   //console.log('data: ', schools[0].data)
-  //console.log('School Sync: ', schoolSync)
-  // console.log('Date Sync: ', dateSync)
-  // console.log('Numbers Sync: ', numColSync)
+  console.log('School Sync: ', schoolSync)
+  console.log('Date Sync: ', dateSync)
+  console.log('Numbers Sync: ', numColSync)
 
-  console.log(
-    schools
-      ?.filter((school) => school.name === 'Escuela')
-      .map((school) => school.data)
-      .flat()
-      .map((school) => school.status)[0]
-  )
+  // console.log('Escuela find:')
+  // console.log(
+  //   schools
+  //     .filter((school) => school.name === schoolSync)
+  //     .map((school) => school.data)
+  //     .flat()
+  //     .filter((school) => school.date === dateSync)[0]?.numbersCollected
+  // )
 
-  async function handleSendData() {
+  // console.log(schools?.filter((school) => school.name !== schoolSync))
+  // // console.log(
+  // //   schools
+  // //     ?.filter((school) => school.name !== schoolSync)
+  // //     .map((school) => school.data)
+  // //     .flat()
+  // //     .map((school) => school.date)
+  // // )
+  // console.log('Escuela find------')
+  function handleSendData() {
     console.log('Send Data')
-    if (!dateSync.length && !numColSync.length) return
-
-    // usar un for para recorrer el array de numColSync en bloques de 10 y enviarlos por separado
-    for (let i = 0; i < numColSync.length; i += 10) {
-      await pushData({
-        date: dateSync,
-        numbersCollected: numColSync.slice(i, i + 10),
-      })
-
-      // console.log(numColSync.slice(i, i + 10))
-    }
-
-    setDateSync('')
-    setNumColSync([])
-    alert('Data enviada')
-    setShowSyncSection(false)
   }
 
-  async function pushData({
-    date,
-    numbersCollected,
-  }: {
-    date: string
-    numbersCollected: string[]
-  }) {
-    setTimeout(() => {
-      console.log('Pushed Data: ', { date, numbersCollected })
-    }, 2000)
+  // useEffect(() => {
 
-    // const ENDPOINT = ''
-    // const res = await fetch(ENDPOINT, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     date,
-    //     numbersCollected,
-    //   }),
-    // })
-
-    // if (!res.ok) {
-    //   console.log('Error al enviar los datos')
-    //   return
-    // }
-
-    // console.log('Data enviada')
-    // console.log(res)
-
-    // const data = await res.json()
-
-    // console.log(data)
-  }
+  // }, [isOnline]);
 
   return (
     <section
@@ -312,8 +274,8 @@ const SyncSection = ({
         Sincronización de datos
       </h2>
 
-      <div className=" w-full max-w-[400px] px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
-        {/* <div className="w-full ">
+      <div className=" w-full max-w-[500px] px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
+        <div className="w-full ">
           <label
             htmlFor="school"
             className="w-full mb-2 flex items-center gap-2"
@@ -343,7 +305,7 @@ const SyncSection = ({
               ))}
             </SelectContent>
           </Select>
-        </div> */}
+        </div>
 
         <div className=" w-full">
           <label htmlFor="date" className="w-full mb-2 flex items-center gap-2">
@@ -355,7 +317,7 @@ const SyncSection = ({
               setDateSync(value)
               setNumColSync(
                 schools
-                  .filter((school) => school.name === 'Escuela')
+                  .filter((school) => school.name === schoolSync)
                   .map((school) => school.data)
                   .flat()
                   .filter((school) => school.date === value)[0]
@@ -363,7 +325,7 @@ const SyncSection = ({
               )
             }}
             value={dateSync?.length ? dateSync : ''}
-            // disabled={!schoolSync?.length}
+            disabled={!schoolSync?.length}
           >
             <SelectTrigger className="w-full">
               <SelectValue
@@ -373,53 +335,20 @@ const SyncSection = ({
             </SelectTrigger>
             <SelectContent>
               {schools
-                ?.filter((school) => school.name === 'Escuela')
+                ?.filter((school) => school.name === schoolSync)
                 .map((school) => school.data)
                 .flat()
-                .map((school, index) => {
-                  const status = schools
-                    ?.filter((school) => school.name === 'Escuela')
-                    .map((school) => school.data)
-                    .flat()
-                    .map((school) => school.status)[0]
-
-                  return (
-                    <SelectItem
-                      key={index}
-                      value={school.date}
-                      // className={`${
-                      //   status === 'sended'
-                      //     ? 'bg-lime-400'
-                      //     : status === 'error'
-                      //     ? 'bg-red-400'
-                      //     : 'bg-purple-400'
-                      // }  `}
-                      color="red"
-                      style={{
-                        backgroundColor:
-                          status === 'sended'
-                            ? 'green'
-                            : status === 'error'
-                            ? 'red'
-                            : 'lightblue',
-                      }}
-                      // disabled={status === 'sended'}
-                    >
-                      {school.date} -{' '}
-                      {status === 'sended'
-                        ? 'Enviado'
-                        : status === 'error'
-                        ? 'Error'
-                        : 'Sin enviar'}
-                    </SelectItem>
-                  )
-                })}
+                .map((school, index) => (
+                  <SelectItem key={index} value={school.date}>
+                    {school.date}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      <div className=" w-full max-w-[400px]  flex items-center justify-between ">
+      <div className=" w-full max-w-[500px]  flex items-center justify-between ">
         <Button
           variant="default"
           onClick={() => setShowSyncSection(false)}
@@ -444,7 +373,9 @@ const SyncSection = ({
           </Button>
         ) : (
           <div className=" bg-neutral-400 text-neutral-800 select-none px-6 p-2 flex items-center gap-4 rounded-md">
-            <WifiOff className={` text-neutral-800 h-4 w-4`} />
+            <WifiOff
+              className={` text-neutral-800 h-4 w-4`}
+            />
             Sin internet
           </div>
         )}

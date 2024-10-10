@@ -5,7 +5,6 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 type DataColected = {
   date: string
   numbersCollected: string[]
-  status: 'unsended' | 'sended' | 'error'
 }
 
 // Define el tipo de datos de cada escuela
@@ -18,7 +17,6 @@ export type DataSchool = {
 const DataCollectedInitial: DataColected = {
   date: '',
   numbersCollected: [],
-  status: 'unsended',
 }
 
 // Define el estado inicial para las escuelas
@@ -57,7 +55,10 @@ export const useStore = create(
           if (!schoolExists) {
             return {
               ...state,
-              schools: [...state.schools, { name, data: [] }],
+              schools: [
+                ...state.schools,
+                { name, data: [] },
+              ],
             }
           }
 
@@ -85,7 +86,6 @@ export const useStore = create(
                   lastEntry = {
                     date: new Date().toLocaleDateString('es-ES'),
                     numbersCollected: [],
-                    status: 'unsended',
                   }
                   school.data = [...school.data, lastEntry]
                 }
@@ -102,12 +102,6 @@ export const useStore = create(
             }),
           }
         })
-      },
-      updateStatus: (
-        date: string,
-        status: 'unsended' | 'sended' | 'error'
-      ) => {
-        
       },
     }),
     {
