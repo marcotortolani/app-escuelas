@@ -117,7 +117,7 @@ function App() {
                   className="text-neutral-500"
                   // onClick={() => setShowInputSchool(true)}
                 >
-                  Ingresar nueva escuela
+                  Nueva escuela
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -130,7 +130,7 @@ function App() {
             >
               <Input
                 type="text"
-                placeholder="Nueva escuela"
+                placeholder="Ingresar nueva escuela"
                 className=""
                 value={newSchool}
                 onChange={(e) => setNewSchool(e.target.value)}
@@ -138,7 +138,10 @@ function App() {
               <Button
                 variant="outline"
                 className=" bg-lime-600 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
-                onClick={() => handleAddSchoolName(newSchool)}
+                onClick={() => {
+                  handleAddSchoolName(newSchool)
+                  setSchoolSelected(newSchool)
+                }}
                 disabled={!newSchool}
               >
                 Agregar
@@ -156,7 +159,7 @@ function App() {
               <Input
                 type="tel"
                 id="tel"
-                placeholder="5411234567"
+                placeholder="5811234567"
                 value={phoneInput}
                 onChange={(e) => setPhoneInput(e.target.value)}
                 className=""
@@ -231,7 +234,7 @@ const SyncSection = ({
   //console.log('data: ', schools[0].data)
   console.log('School Sync: ', schoolSync)
   console.log('Date Sync: ', dateSync)
-  console.log('Number Sync: ', numColSync)
+  console.log('Numbers Sync: ', numColSync)
 
   // console.log('Escuela find:')
   // console.log(
@@ -251,6 +254,9 @@ const SyncSection = ({
   // //     .map((school) => school.date)
   // // )
   // console.log('Escuela find------')
+  function handleSendData() {
+    console.log('Send Data')
+  }
 
   return (
     <section
@@ -331,7 +337,7 @@ const SyncSection = ({
         </Button>
         <Button
           variant="default"
-          onClick={() => setShowSyncSection(false)}
+          onClick={handleSendData}
           disabled={numColSync.length === 0}
           className=" z-50  bg-sky-200 text-neutral-800 hover:bg-sky-400 disabled:bg-neutral-400 disabled:text-neutral-600"
         >
