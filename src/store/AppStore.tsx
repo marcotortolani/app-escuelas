@@ -103,11 +103,26 @@ export const useStore = create(
           }
         })
       },
-      updateStatus: (
-        date: string,
-        status: 'unsended' | 'sended' | 'error'
-      ) => {
-        
+      updateStatus: (date: string, status: 'unsended' | 'sended' | 'error') => {
+        set((state) => {
+          return {
+            ...state,
+            schools: state.schools.map((school) => {
+              return {
+                ...school,
+                data: school.data.map((data) => {
+                  if (data.date === date) {
+                    return {
+                      ...data,
+                      status,
+                    }
+                  }
+                  return data
+                }),
+              }
+            }),
+          }
+        })
       },
     }),
     {

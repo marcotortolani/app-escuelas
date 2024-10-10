@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useStore } from './store/AppStore'
 import useNetworkStatus from './hooks/useNetworkStatus'
 import { DataSchool } from './store/AppStore'
@@ -29,7 +29,7 @@ function App() {
   const addNumberCollected = useStore((state) => state.addNumberCollected)
   //const [newSchool, setNewSchool] = useState('')
   //const [showInputSchool, setShowInputSchool] = useState(false)
-  const [schoolSelected, setSchoolSelected] = useState('')
+  //const [schoolSelected, setSchoolSelected] = useState('')
   const [phoneInput, setPhoneInput] = useState('')
   const [showSyncSection, setShowSyncSection] = useState(false)
   const { isOnline } = useNetworkStatus()
@@ -39,7 +39,8 @@ function App() {
   //   year: 'numeric',
   // })
 
-  const handleAddNumber = (name: string, number: string) => {
+  const handleAddNumber = (number: string) => {
+    
     setSchoolName('Escuela') // Configura la escuela
     addNumberCollected('Escuela', number) // Agrega el número
     setPhoneInput('')
@@ -72,11 +73,11 @@ function App() {
   //   console.log(value)
   // }
 
-  useEffect(() => {
-    if (schools?.length) {
-      setSchoolSelected(schools[0].name)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (schools?.length) {
+  //     setSchoolSelected(schools[0].name)
+  //   }
+  // }, [])
 
   return (
     <main className="relative w-screen h-[100dvh] min-h-fit px-4 py-8 flex flex-col items-center justify-center gap-10 bg-neutral-800 overflow-hidden">
@@ -169,7 +170,7 @@ function App() {
                 variant="default"
                 className="w-1/2 bg-lime-600 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
                 disabled={!phoneInput}
-                onClick={() => handleAddNumber(schoolSelected, phoneInput)}
+                onClick={() => handleAddNumber(phoneInput)}
               >
                 Agregar
               </Button>
