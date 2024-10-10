@@ -245,7 +245,7 @@ const SyncSection = ({
     <section
       className={`${
         showSyncSection ? ' translate-y-0 ' : ' translate-y-full  '
-      } absolute top-0 w-full max-h-[500px] px-4 h-full flex flex-col items-center justify-center gap-10 bg-sky-800 transition-all duration-300 ease-in-out`}
+      } absolute top-0 w-full  px-4 h-full flex flex-col items-center justify-center gap-10 bg-sky-800 transition-all duration-300 ease-in-out`}
     >
       <h2 className="text-xl text-center text-white uppercase font-bold tracking-wider">
         Sincronización de datos
@@ -309,7 +309,7 @@ const SyncSection = ({
         </Select>
       </div>
 
-      <div className=" w-full  flex items-center justify-between ">
+      <div className=" w-full max-h-[500px]  flex items-center justify-between ">
         <Button
           variant="default"
           onClick={() => setShowSyncSection(false)}
