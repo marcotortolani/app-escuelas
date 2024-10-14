@@ -37,8 +37,7 @@ function App() {
   const handleAddNumber = (number: string) => {
     if (number.length > 10 || number.length < 10) return
     const formatedNumber = `${number.slice(0, 3)}-${number.slice(3, 10)}`
-    console.log(formatedNumber);
-    
+
     setSchoolName('Escuela') // Configura la escuela
     addNumberCollected('Escuela', formatedNumber) // Agrega el número
     setPhoneInput('')
@@ -184,12 +183,11 @@ const SyncSection = ({
         numbersCollected: numColSync.slice(i, i + 10),
       })
 
-      // console.log(numColSync.slice(i, i + 10))
-      if (!res) {
+      if (!res.ok) {
         updateStatus(dateSync, 'error')
         break
       }
-      if (res) {
+      if (res.ok) {
         alert('Data enviada')
         updateStatus(dateSync, 'sended')
       }
@@ -198,7 +196,6 @@ const SyncSection = ({
     setDateSync('')
     setNumColSync([])
     setShowSyncSection(false)
-    updateStatus(dateSync, 'sended')
   }
 
   async function pushData({
