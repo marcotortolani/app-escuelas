@@ -174,6 +174,7 @@ const SyncSection = ({
     setDateSync('')
     setNumColSync([])
     setShowSyncSection(false)
+    updateStatus(dateSync, 'sended')
   }
 
   async function pushData({
