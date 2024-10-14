@@ -188,11 +188,11 @@ const SyncSection = ({
         break
       }
       if (res.ok) {
-        alert('Data enviada')
         updateStatus(dateSync, 'sended')
       }
     }
 
+    alert('Data enviada')
     setDateSync('')
     setNumColSync([])
     setShowSyncSection(false)
