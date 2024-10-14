@@ -41,17 +41,6 @@ export default defineConfig({
               },
             },
           },
-          {
-            urlPattern: ({ url }) => url.pathname.endsWith('.mp3'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'mp3-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 días
-              },
-            },
-          },
         ],
         // clientsClaim: true,
         // skipWaiting: true
@@ -62,24 +51,24 @@ export default defineConfig({
         short_name: 'Proyecto Escuelas Venezuela',
         description: 'Proyecto Escuelas Venezuela',
         theme_color: '#ffffff',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
+        // icons: [
+        //   {
+        //     src: 'pwa-192x192.png',
+        //     sizes: '192x192',
+        //     type: 'image/png',
+        //   },
+        //   {
+        //     src: 'pwa-512x512.png',
+        //     sizes: '512x512',
+        //     type: 'image/png',
+        //   },
+        //   {
+        //     src: 'pwa-512x512.png',
+        //     sizes: '512x512',
+        //     type: 'image/png',
+        //     purpose: 'any maskable',
+        //   },
+        // ],
       },
       devOptions: {
         enabled: false,
