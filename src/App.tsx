@@ -22,7 +22,11 @@ import {
   CalendarCheck,
 } from 'lucide-react'
 
-//import { SchoolInitialState } from './store/AppStore'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import rc4Min from 'rc4.js'
+const rc4 = new rc4Min('appSchoolVenezuela')
+
 
 function App() {
   const { schools, setSchoolName } = useStore()
@@ -37,9 +41,10 @@ function App() {
   const handleAddNumber = (number: string) => {
     if (number.length > 10 || number.length < 10) return
     const formatedNumber = `${number.slice(0, 3)}-${number.slice(3, 10)}`
+    const numberEncrypted = rc4.encrypt(formatedNumber)
 
     setSchoolName('Escuela') // Configura la escuela
-    addNumberCollected('Escuela', formatedNumber) // Agrega el número
+    addNumberCollected('Escuela', numberEncrypted) // Agrega el número
     setPhoneInput('')
 
     const actualDate = new Date().toLocaleDateString('es-ES')
