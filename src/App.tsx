@@ -200,7 +200,7 @@ const SyncSection = ({
     numbersCollected: string[]
   }) {
     const ENDPOINT =
-      'https://test.moob.club:8000/movistar/venezuela/app-escuelas/'
+      'https://test.moob.club:8005/movistar/venezuela/app-escuelas/'
 
     // let res, data
 
