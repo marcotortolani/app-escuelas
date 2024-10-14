@@ -37,6 +37,7 @@ type State = {
 type Action = {
   setSchoolName: (name: string) => void
   addNumberCollected: (name: string, number: string) => void
+  updateStatus: (date: string, status: 'unsended' | 'sended' | 'error') => void
 }
 
 export const useStore = create(
