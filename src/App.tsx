@@ -30,16 +30,37 @@ function App() {
   const updateStatus = useStore((state) => state.updateStatus)
 
   const [phoneInput, setPhoneInput] = useState('')
+  const [inputMessage, setInputMessage] = useState('')
   const [showSyncSection, setShowSyncSection] = useState(false)
   const { isOnline } = useNetworkStatus()
 
   const handleAddNumber = (number: string) => {
+    if (number.length > 10 || number.length < 10) return
+    const formatedNumber = `${number.slice(0, 3)}-${number.slice(3, 10)}`
+    console.log(formatedNumber);
+    
     setSchoolName('Escuela') // Configura la escuela
-    addNumberCollected('Escuela', number) // Agrega el número
+    addNumberCollected('Escuela', formatedNumber) // Agrega el número
     setPhoneInput('')
 
     const actualDate = new Date().toLocaleDateString('es-ES')
     updateStatus(actualDate, 'unsended')
+  }
+
+  function handleInputNumber(event: React.ChangeEvent<HTMLInputElement>) {
+    setPhoneInput(event.target.value)
+
+    if (event.target.value.length > 10) {
+      setInputMessage('El número tiene más de 10 dígitos')
+    }
+
+    if (event.target.value.length < 10) {
+      setInputMessage('El número debe tener 10 dígitos')
+    }
+
+    if (event.target.value.length === 10) {
+      setInputMessage('')
+    }
   }
 
   return (
@@ -55,18 +76,23 @@ function App() {
               <span className=" text-neutral-800">Ingrese nuevo Teléfono</span>
             </label>
             <div className=" w-full flex flex-col gap-10  items-center justify-between ">
-              <Input
-                type="tel"
-                id="tel"
-                placeholder="5811234567"
-                value={phoneInput}
-                onChange={(e) => setPhoneInput(e.target.value)}
-                className=""
-              />
+              <div className="relative w-full h-fit">
+                <Input
+                  type="tel"
+                  id="tel"
+                  placeholder="5811234567"
+                  value={phoneInput}
+                  onChange={(e) => handleInputNumber(e)}
+                  className=""
+                />
+                <p className=" absolute mt-1 text-sm text-red-600">
+                  {inputMessage}
+                </p>
+              </div>
               <Button
                 variant="default"
                 className="w-1/2 bg-lime-600 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
-                disabled={!phoneInput}
+                disabled={phoneInput.length !== 10}
                 onClick={() => handleAddNumber(phoneInput)}
               >
                 Agregar
@@ -139,38 +165,36 @@ const SyncSection = ({
   // console.log('Date Sync: ', dateSync)
   // console.log('Numbers Sync: ', numColSync)
 
-  console.log(
-    schools
-      ?.filter((school) => school.name === 'Escuela')
-      .map((school) => school.data)
-      .flat()
-      .map((school) => school.status)[0]
-  )
+  // console.log(
+  //   schools
+  //     ?.filter((school) => school.name === 'Escuela')
+  //     .map((school) => school.data)
+  //     .flat()
+  //     .map((school) => school.status)[0]
+  // )
 
   async function handleSendData() {
     console.log('Send Data')
     if (!dateSync.length && !numColSync.length) return
-    let res
 
     // usar un for para recorrer el array de numColSync en bloques de 10 y enviarlos por separado
     for (let i = 0; i < numColSync.length; i += 10) {
-      res = await pushData({
+      const res = await pushData({
         date: dateSync,
         numbersCollected: numColSync.slice(i, i + 10),
       })
 
       // console.log(numColSync.slice(i, i + 10))
-      // if (!res.ok) {
-      //   //updateStatus(dateSync, 'error')
-      // break
-      // }
+      if (!res) {
+        updateStatus(dateSync, 'error')
+        break
+      }
+      if (res) {
+        alert('Data enviada')
+        updateStatus(dateSync, 'sended')
+      }
     }
-    // if (res && res?.ok) {
-    //   alert('Data enviada')
-    //   updateStatus(dateSync, 'sended')
-    // }
 
-    console.log(res)
     setDateSync('')
     setNumColSync([])
     setShowSyncSection(false)
@@ -196,22 +220,25 @@ const SyncSection = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          date,
-          numbersCollected,
+          name: 'Escuela',
+          data: [
+            {
+              date,
+              numbersCollected,
+            },
+          ],
         }),
         redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        mode: 'no-cors',
       })
 
       data = await res.json()
+      console.log('---- Data enviada: ----')
       console.log(data)
-      // console.log('Data enviada')
-      // console.log(res)
+      return { ok: true }
     } catch (error) {
       console.log('Error al enviar los datos: ', error)
       console.log(error)
-      console.log(res)
+      return { ok: false, error: error }
     }
   }
 
@@ -226,38 +253,6 @@ const SyncSection = ({
       </h2>
 
       <div className=" w-full max-w-[400px] px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
-        {/* <div className="w-full ">
-          <label
-            htmlFor="school"
-            className="w-full mb-2 flex items-center gap-2"
-          >
-            <School className="h-4 w-4 text-neutral-800" />
-            <span className=" text-neutral-800">Escuela</span>
-          </label>
-          <Select
-            onValueChange={(value) => {
-              setSchoolSync(value)
-              setDateSync('')
-              setNumColSync([])
-            }}
-            value={schoolSync?.length ? schoolSync : ''}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue
-                placeholder={'Seleccione una escuela'}
-                className="w-[180px]"
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {schools.map((school, index) => (
-                <SelectItem key={index} value={school.name}>
-                  {school.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div> */}
-
         <div className=" w-full">
           <label htmlFor="date" className="w-full mb-2 flex items-center gap-2">
             <CalendarCheck className="h-4 w-4 text-neutral-800" />
@@ -295,14 +290,6 @@ const SyncSection = ({
                       key={index}
                       value={school.date}
                       className=" my-2"
-                      // className={`${
-                      //   school.status === 'sended'
-                      //     ? 'bg-lime-400'
-                      //     : status === 'error'
-                      //     ? 'bg-red-400'
-                      //     : 'bg-purple-400'
-                      // }  `}
-                      color="red"
                       style={{
                         backgroundColor:
                           school.status === 'sended'
