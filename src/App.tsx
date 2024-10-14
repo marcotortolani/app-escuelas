@@ -158,23 +158,14 @@ const SyncSection = ({
 }) => {
   //const [schoolSync, setSchoolSync] = useState('Escuela')
   const [dateSync, setDateSync] = useState('')
+  const [popupMessage, setPopupMessage] = useState('')
   const [numColSync, setNumColSync] = useState<string[]>([])
-  //console.log('data: ', schools[0].data)
-  //console.log('School Sync: ', schoolSync)
-  // console.log('Date Sync: ', dateSync)
-  // console.log('Numbers Sync: ', numColSync)
-
-  // console.log(
-  //   schools
-  //     ?.filter((school) => school.name === 'Escuela')
-  //     .map((school) => school.data)
-  //     .flat()
-  //     .map((school) => school.status)[0]
-  // )
 
   async function handleSendData() {
-    console.log('Send Data')
+    // console.log('Send Data')
     if (!dateSync.length && !numColSync.length) return
+
+    setPopupMessage('Enviando datos... Por favor espere.')
 
     // usar un for para recorrer el array de numColSync en bloques de 10 y enviarlos por separado
     for (let i = 0; i < numColSync.length; i += 10) {
@@ -185,17 +176,20 @@ const SyncSection = ({
 
       if (!res.ok) {
         updateStatus(dateSync, 'error')
+        console.error('Error')
+
         break
       }
       if (res.ok) {
         updateStatus(dateSync, 'sended')
+        console.log('Paquete de datos enviado')
       }
     }
 
-    alert('Data enviada')
     setDateSync('')
     setNumColSync([])
     setShowSyncSection(false)
+    setPopupMessage('')
   }
 
   async function pushData({
@@ -208,10 +202,10 @@ const SyncSection = ({
     const ENDPOINT =
       'http://test.moob.club:8000/movistar/venezuela/app-escuelas/'
 
-    let res, data
+    // let res, data
 
     try {
-      res = await fetch(ENDPOINT, {
+      const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,13 +222,16 @@ const SyncSection = ({
         redirect: 'follow',
       })
 
-      data = await res.json()
-      console.log('---- Data enviada: ----')
+      const data = await res.json()
       console.log(data)
+
+      // data = await res.json()
+      // console.log('---- Data enviada: ----')
+      // console.log(data)
       return { ok: true }
     } catch (error) {
       console.log('Error al enviar los datos: ', error)
-      console.log(error)
+      // console.log(error)
       return { ok: false, error: error }
     }
   }
@@ -340,6 +337,16 @@ const SyncSection = ({
             Sin internet
           </div>
         )}
+      </div>
+
+      <div
+        className={` ${
+          popupMessage.length ? 'block' : 'hidden'
+        } absolute z-50 w-full max-w-[400px] h-full flex items-center justify-center bg-black/80 pointer-events-none  rounded-lg`}
+      >
+        <p className="bg-sky-700 text-white uppercase font-semibold animate-pulse text-center px-20 py-6">
+          {popupMessage}
+        </p>
       </div>
     </section>
   )
