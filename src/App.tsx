@@ -342,9 +342,9 @@ const SyncSection = ({
       <div
         className={` ${
           popupMessage.length ? 'block' : 'hidden'
-        } absolute z-50 w-full max-w-[400px] h-full flex items-center justify-center bg-black/80 pointer-events-none  rounded-lg`}
+        } absolute z-50 w-full h-full flex items-center justify-center bg-black/80 pointer-events-none`}
       >
-        <p className="bg-sky-700 text-white uppercase font-semibold animate-pulse text-center px-20 py-6">
+        <p className=" w-full max-w-[360px] bg-sky-700 text-white uppercase font-semibold animate-pulse text-center px-20 py-6 sm:rounded-lg">
           {popupMessage}
         </p>
       </div>
