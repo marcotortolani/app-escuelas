@@ -43,7 +43,7 @@ function App() {
     setSchoolName('Escuela') // Configura la escuela
     const numberEncrypted = rc4.encrypt(number)
     addNumberCollected('Escuela', numberEncrypted) // Agrega el número
-    
+
     // cargar 500 numeros consecutoivos para prueba de carga masiva
     // for (let i = 0; i < 500; i++) {
     //   const numberInt = parseInt(number) + i
@@ -315,7 +315,7 @@ const SyncSection = ({
                     <SelectItem
                       key={index}
                       value={school.date}
-                      className=" my-2"
+                      className=" my-2 cursor-pointer"
                       style={{
                         backgroundColor:
                           school.status === 'sended'
