@@ -41,14 +41,16 @@ function App() {
   const handleAddNumber = (number: string) => {
     if (number.length > 10 || number.length < 10) return
     setSchoolName('Escuela') // Configura la escuela
-    // const numberEncrypted = rc4.encrypt(number)
-    // addNumberCollected('Escuela', numberEncrypted) // Agrega el número
-    for (let i = 0; i < 500; i++) {
-      const numberInt = parseInt(number) + i
+    const numberEncrypted = rc4.encrypt(number)
+    addNumberCollected('Escuela', numberEncrypted) // Agrega el número
+    
+    // cargar 500 numeros consecutoivos para prueba de carga masiva
+    // for (let i = 0; i < 500; i++) {
+    //   const numberInt = parseInt(number) + i
 
-      const numberEncrypted = rc4.encrypt(numberInt.toString())
-      addNumberCollected('Escuela', numberEncrypted) // Agrega el número
-    }
+    //   const numberEncrypted = rc4.encrypt(numberInt.toString())
+    //   addNumberCollected('Escuela', numberEncrypted) // Agrega el número
+    // }
 
     setPhoneInput('')
     setFormatedPhone('')
