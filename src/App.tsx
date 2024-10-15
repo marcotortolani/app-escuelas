@@ -27,42 +27,59 @@ import {
 import rc4Min from 'rc4.js'
 const rc4 = new rc4Min('appSchoolVenezuela')
 
-
 function App() {
   const { schools, setSchoolName } = useStore()
   const addNumberCollected = useStore((state) => state.addNumberCollected)
   const updateStatus = useStore((state) => state.updateStatus)
 
   const [phoneInput, setPhoneInput] = useState('')
+  const [formatedPhone, setFormatedPhone] = useState('')
   const [inputMessage, setInputMessage] = useState('')
   const [showSyncSection, setShowSyncSection] = useState(false)
-  const { isOnline } = useNetworkStatus()
+  const { isOnline, hasInternet } = useNetworkStatus()
 
   const handleAddNumber = (number: string) => {
     if (number.length > 10 || number.length < 10) return
-    const formatedNumber = `${number.slice(0, 3)}-${number.slice(3, 10)}`
-    const numberEncrypted = rc4.encrypt(formatedNumber)
+
+    console.log(number)
+
+    const numberEncrypted = rc4.encrypt(number)
 
     setSchoolName('Escuela') // Configura la escuela
     addNumberCollected('Escuela', numberEncrypted) // Agrega el número
     setPhoneInput('')
+    setFormatedPhone('')
 
     const actualDate = new Date().toLocaleDateString('es-ES')
     updateStatus(actualDate, 'unsended')
   }
 
-  function handleInputNumber(event: React.ChangeEvent<HTMLInputElement>) {
-    setPhoneInput(event.target.value)
+  const removeFormatting = (value: string) => {
+    return value.replace(/\D/g, '')
+  }
 
-    if (event.target.value.length > 10) {
+  const formatPhoneNumber = (value: string) => {
+    if (value.length > 3) {
+      return `${value.slice(0, 3)}-${value.slice(3, 10)}`
+    }
+    return value
+  }
+
+  function handleInputNumber(event: React.ChangeEvent<HTMLInputElement>) {
+    const numberInput = event.target.value
+    const rawValue = removeFormatting(numberInput)
+    setPhoneInput(rawValue)
+    setFormatedPhone(formatPhoneNumber(rawValue))
+
+    if (rawValue.length > 10) {
       setInputMessage('El número tiene más de 10 dígitos')
     }
 
-    if (event.target.value.length < 10) {
+    if (rawValue.length < 10) {
       setInputMessage('El número debe tener 10 dígitos')
     }
 
-    if (event.target.value.length === 10) {
+    if (rawValue.length === 10) {
       setInputMessage('')
     }
   }
@@ -77,17 +94,19 @@ function App() {
           <div className="w-full flex flex-col items-start gap-2">
             <label htmlFor="tel" className="flex items-center gap-2">
               <PhoneIcon className="h-4 w-4 text-neutral-800" />
-              <span className=" text-neutral-800">Ingrese nuevo Teléfono</span>
+              <span className=" text-neutral-800">Teléfono</span>
             </label>
             <div className=" w-full flex flex-col gap-10  items-center justify-between ">
               <div className="relative w-full h-fit">
                 <Input
                   type="tel"
                   id="tel"
-                  placeholder="5811234567"
-                  value={phoneInput}
+                  placeholder="Ingrese nuevo Teléfono"
+                  value={formatedPhone}
                   onChange={(e) => handleInputNumber(e)}
-                  className=""
+                  className=" font-medium text-lg placeholder:font-normal placeholder:text-base"
+                  minLength={11}
+                  maxLength={11}
                 />
                 <p className=" absolute mt-1 text-sm text-red-600">
                   {inputMessage}
@@ -107,14 +126,14 @@ function App() {
 
         <div className=" z-0 relative flex flex-col items-center gap-2">
           <Button
-            disabled={!isOnline}
+            disabled={!isOnline || !hasInternet}
             variant="default"
             onClick={() => setShowSyncSection(true)}
             className=" z-50 w-full bg-sky-700 text-white hover:bg-sky-800 disabled:bg-neutral-400 disabled:text-neutral-600"
           >
             <RefreshCcw
               className={`${
-                !isOnline ? 'text-neutral-600' : 'text-white'
+                !hasInternet || !hasInternet ? 'text-neutral-600' : 'text-white'
               } h-4 w-4 mr-2`}
             />
             Sincronizar datos
@@ -122,13 +141,13 @@ function App() {
 
           <div
             className={`${
-              !isOnline
+              !isOnline || !hasInternet
                 ? ' translate-y-full -bottom-2 '
                 : ' translate-y-0 bottom-1 opacity-0 '
             } z-0 absolute w-full px-2 py-1 bg-sky-300 flex items-center justify-center gap-2 transition-all duration-300 ease-in-out rounded-sm `}
           >
             <WifiOff className="h-4 w-4 text-black" />
-            <p className=" text-sm">Sin conexión WiFi</p>
+            <p className=" text-sm">Sin conexión</p>
           </div>
         </div>
       </section>
@@ -140,6 +159,7 @@ function App() {
           updateStatus,
           schools,
           isOnline,
+          hasInternet,
         }}
       />
     </main>
@@ -154,12 +174,14 @@ const SyncSection = ({
   updateStatus,
   schools,
   isOnline,
+  hasInternet,
 }: {
   showSyncSection: boolean
   setShowSyncSection: React.Dispatch<React.SetStateAction<boolean>>
   updateStatus: (date: string, status: 'unsended' | 'sended' | 'error') => void
   schools: DataSchool[]
   isOnline: boolean
+  hasInternet: boolean
 }) => {
   //const [schoolSync, setSchoolSync] = useState('Escuela')
   const [dateSync, setDateSync] = useState('')
@@ -322,7 +344,7 @@ const SyncSection = ({
           <XSquare className={` text-white h-4 w-4 mr-2`} />
           Cerrar/Cancelar
         </Button>
-        {isOnline ? (
+        {isOnline && hasInternet ? (
           <Button
             variant="default"
             onClick={handleSendData}
