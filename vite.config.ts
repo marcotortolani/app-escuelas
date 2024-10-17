@@ -17,7 +17,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,jsx,css,html}'],
+        globPatterns: ['**/*.{js,jsx,ts,tsx,css,html}'],
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.destination === 'image',

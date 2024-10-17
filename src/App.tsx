@@ -18,6 +18,12 @@ import { WifiOff, XSquare, CalendarCheck, MoveRightIcon } from 'lucide-react'
 import rc4Min from 'rc4.js'
 const rc4 = new rc4Min('appSchoolVenezuela')
 
+import syncButton from '/img/btn-sincronizar.webp'
+import noConectionImage from '/img/sin-conexion.webp'
+import teamGamersLogo from '/img/logo.webp'
+import movistarLogo from '/img/logo-movistar.webp'
+import backgroundImage from '/img/landing-bg.webp'
+
 function App() {
   const { schools, setSchoolName } = useStore()
   const addNumberCollected = useStore((state) => state.addNumberCollected)
@@ -85,7 +91,7 @@ function App() {
       <main
         className="relative w-screen max-w-7xl mx-auto h-[100dvh] min-h-fit px-4 py-8 flex flex-col items-center justify-center md:justify-evenly gap-4 overflow-hidden"
         style={{
-          backgroundImage: 'url(/img/landing-bg.webp)',
+          backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
         }}
       >
@@ -96,20 +102,17 @@ function App() {
               onClick={() => setShowSyncSection(true)}
               className=" z-50 w-full "
             >
-              <img src="/img/btn-sincronizar.webp" alt="Sync Button" />
+              <img src={syncButton} alt="Sync Button" />
             </button>
           ) : (
             <div className={` z-0  w-full  `}>
-              <img
-                src="/img/sin-conexion.webp"
-                alt="No internet conection Icon"
-              />
+              <img src={noConectionImage} alt="No internet conection Icon" />
             </div>
           )}
         </div>
         <div className=" w-full flex flex-col items-center gap-2 lg:gap-6">
           <img
-            src="/img/logo.webp"
+            src={teamGamersLogo}
             alt="Team Gamers Logo"
             className=" w-5/6 max-w-[350px] "
           />
@@ -161,7 +164,7 @@ function App() {
         </section>
 
         <img
-          src="/img/logo-movistar.webp"
+          src={movistarLogo}
           alt="Brand Logo"
           className="w-1/2 max-w-[300px]"
         />
@@ -284,7 +287,7 @@ const SyncSection = ({
         showSyncSection ? ' translate-y-0 ' : ' translate-y-full  '
       } absolute top-0 w-full  px-4 h-full flex flex-col items-center justify-evenly lg:gap-20 transition-all duration-300 ease-in-out`}
       style={{
-        backgroundImage: 'url(/img/landing-bg.webp)',
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
       }}
     >
@@ -293,11 +296,13 @@ const SyncSection = ({
         onClick={() => setShowSyncSection(false)}
         className=" z-50 absolute top-4 right-4 bg-neutral-950 text-white rounded-sm "
       >
-        <XSquare className={` text-white h-5 w-5 md:w-7 md:h-7 lg:w-9 lg:h-9 m-2`} />
+        <XSquare
+          className={` text-white h-5 w-5 md:w-7 md:h-7 lg:w-9 lg:h-9 m-2`}
+        />
       </button>
       <div className=" w-full flex flex-col items-center gap-2 lg:gap-6">
         <img
-          src="/img/logo.webp"
+          src={teamGamersLogo}
           alt="Team Gamers Logo"
           className=" w-5/6 max-w-[350px] "
         />
@@ -328,7 +333,7 @@ const SyncSection = ({
               )
             }}
             value={dateSync?.length ? dateSync : ''}
-            
+
             // disabled={!schoolSync?.length}
           >
             <SelectTrigger className="w-full md:text-lg lg:text-xl">
@@ -404,7 +409,7 @@ const SyncSection = ({
       </div>
 
       <img
-        src="/img/logo-movistar.webp"
+        src={movistarLogo}
         alt="Brand Logo"
         className="w-1/2 max-w-[300px]"
       />
