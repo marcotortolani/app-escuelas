@@ -47,28 +47,18 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Proyecto Escuelas Venezuela',
-        short_name: 'Proyecto Escuelas Venezuela',
-        description: 'Proyecto Escuelas Venezuela',
-        theme_color: '#ffffff',
-        // icons: [
-        //   {
-        //     src: 'pwa-192x192.png',
-        //     sizes: '192x192',
-        //     type: 'image/png',
-        //   },
-        //   {
-        //     src: 'pwa-512x512.png',
-        //     sizes: '512x512',
-        //     type: 'image/png',
-        //   },
-        //   {
-        //     src: 'pwa-512x512.png',
-        //     sizes: '512x512',
-        //     type: 'image/png',
-        //     purpose: 'any maskable',
-        //   },
-        // ],
+        name: 'Team Gamers Venezuela',
+        short_name: 'Team Gamers Venezuela',
+        description: 'Team Gamers Venezuela',
+        theme_color: '#000',
+        icons: [
+          {
+            src: '/public/favicon.png',
+            sizes: '96x96',
+            type: 'image/png',
+          },
+        
+        ],
       },
       devOptions: {
         enabled: false,
