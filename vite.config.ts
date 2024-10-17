@@ -53,11 +53,10 @@ export default defineConfig({
         theme_color: '#000',
         icons: [
           {
-            src: '/public/favicon.png',
+            src: './src/assets/favicon.png',
             sizes: '96x96',
             type: 'image/png',
           },
-        
         ],
       },
       devOptions: {

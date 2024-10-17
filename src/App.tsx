@@ -18,12 +18,11 @@ import { WifiOff, XSquare, CalendarCheck, MoveRightIcon } from 'lucide-react'
 import rc4Min from 'rc4.js'
 const rc4 = new rc4Min('appSchoolVenezuela')
 
-import syncButton from '/img/btn-sincronizar.webp'
-// import noConectionImage from '/img/sin-conexion.webp'
+import syncButton from './assets/img/btn-sincronizar.webp'
 import noConectionImage from './assets/img/sin-conexion.webp'
-import teamGamersLogo from '/img/logo.webp'
-import movistarLogo from '/img/logo-movistar.webp'
-import backgroundImage from '/img/landing-bg.webp'
+import teamGamersLogo from './assets/img/logo.webp'
+import movistarLogo from './assets/img/logo-movistar.webp'
+import backgroundImage from './assets/img/landing-bg.webp'
 
 function App() {
   const { schools, setSchoolName } = useStore()
