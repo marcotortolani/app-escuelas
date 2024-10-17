@@ -9,18 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import {
-  PhoneIcon,
-  //School,
-  RefreshCcw,
-  WifiOff,
-  XSquare,
-  SendHorizontal,
-  CalendarCheck,
-} from 'lucide-react'
+import { WifiOff, XSquare, CalendarCheck, MoveRightIcon } from 'lucide-react'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -44,7 +35,7 @@ function App() {
     const numberEncrypted = rc4.encrypt(number)
     addNumberCollected('Escuela', numberEncrypted) // Agrega el número
 
-    // cargar 500 numeros consecutoivos para prueba de carga masiva
+    // cargar 500 numeros consecutivos para prueba de carga masiva
     // for (let i = 0; i < 500; i++) {
     //   const numberInt = parseInt(number) + i
 
@@ -90,84 +81,103 @@ function App() {
   }
 
   return (
-    <main className="relative w-screen h-[100dvh] min-h-fit px-4 py-8 flex flex-col items-center justify-center gap-10 bg-neutral-800 overflow-hidden">
-      <h1 className="text-3xl text-white uppercase font-medium tracking-wider">
-        Escuela
-      </h1>
-      <section className="w-full h-4/5 min-h-fit max-h-[500px] flex flex-col items-center justify-evenly gap-4">
-        <div className=" w-full px-4 max-w-[400px]  py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
-          <div className="w-full flex flex-col items-start gap-2">
-            <label htmlFor="tel" className="flex items-center gap-2">
-              <PhoneIcon className="h-4 w-4 text-neutral-800" />
-              <span className=" text-neutral-800">Teléfono</span>
-            </label>
-            <div className=" w-full flex flex-col gap-10  items-center justify-between ">
-              <div className="relative w-full h-fit">
-                <Input
-                  type="tel"
-                  id="tel"
-                  placeholder="Ingrese nuevo Teléfono"
-                  value={formatedPhone}
-                  onChange={(e) => handleInputNumber(e)}
-                  className=" font-medium text-lg placeholder:font-normal placeholder:text-base"
-                  minLength={11}
-                  maxLength={11}
-                />
-                <p className=" absolute mt-1 text-sm text-red-600">
-                  {inputMessage}
-                </p>
-              </div>
-              <Button
-                variant="default"
-                className="w-1/2 bg-lime-600 text-white disabled:bg-neutral-400 disabled:text-neutral-600"
-                disabled={phoneInput.length !== 10}
-                onClick={() => handleAddNumber(phoneInput)}
-              >
-                Agregar
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div className=" z-0 relative flex flex-col items-center gap-2">
-          <Button
-            disabled={!isOnline || !hasInternet}
-            variant="default"
-            onClick={() => setShowSyncSection(true)}
-            className=" z-50 w-full bg-sky-700 text-white hover:bg-sky-800 disabled:bg-neutral-400 disabled:text-neutral-600"
-          >
-            <RefreshCcw
-              className={`${
-                !hasInternet || !hasInternet ? 'text-neutral-600' : 'text-white'
-              } h-4 w-4 mr-2`}
-            />
-            Sincronizar datos
-          </Button>
-
-          <div
-            className={`${
-              !isOnline || !hasInternet
-                ? ' translate-y-full -bottom-2 '
-                : ' translate-y-0 bottom-1 opacity-0 '
-            } z-0 absolute w-full px-2 py-1 bg-sky-300 flex items-center justify-center gap-2 transition-all duration-300 ease-in-out rounded-sm `}
-          >
-            <WifiOff className="h-4 w-4 text-black" />
-            <p className=" text-sm">Sin conexión</p>
-          </div>
-        </div>
-      </section>
-
-      <SyncSection
-        {...{
-          showSyncSection,
-          setShowSyncSection,
-          updateStatus,
-          schools,
-          isOnline,
-          hasInternet,
+    <div className=" w-screen bg-black ">
+      <main
+        className="relative w-screen max-w-7xl mx-auto h-[100dvh] min-h-fit px-4 py-8 flex flex-col items-center justify-center md:justify-evenly gap-4 overflow-hidden"
+        style={{
+          backgroundImage: 'url(/img/landing-bg.webp)',
+          backgroundSize: 'cover',
         }}
-      />
-    </main>
+      >
+        <div className=" z-0 absolute top-4 right-4 w-16 md:w-24 p-1 flex flex-col items-center gap-2">
+          {hasInternet ? (
+            <button
+              type="button"
+              onClick={() => setShowSyncSection(true)}
+              className=" z-50 w-full "
+            >
+              <img src="/img/btn-sincronizar.webp" alt="Sync Button" />
+            </button>
+          ) : (
+            <div className={` z-0  w-full  `}>
+              <img
+                src="/img/sin-conexion.webp"
+                alt="No internet conection Icon"
+              />
+            </div>
+          )}
+        </div>
+        <div className=" w-full flex flex-col items-center gap-2 lg:gap-6">
+          <img
+            src="/img/logo.webp"
+            alt="Team Gamers Logo"
+            className=" w-5/6 max-w-[350px] "
+          />
+          <p className=" text-white uppercase font-poppinsBoldItalic md:text-2xl">
+            Tu portal de gaming
+          </p>
+        </div>
+        <section className="w-full min-h-fit max-h-[500px] flex flex-col items-center gap-3">
+          <p className=" font-white font-poppinsReg text-white uppercase text-[0.65rem] md:text-sm lg:text-base">
+            Dejanos tu teléfono y llevate merchandising exclusivo
+          </p>
+          <div className=" w-full max-w-[400px] lg:max-w-[500px] px-4 py-6 lg:px-8 flex flex-col items-center justify-between gap-6 lg:gap-8 bg-[#dbdbdb] rounded-2xl">
+            <label
+              htmlFor="tel"
+              className=" w-full text-neutral-800 uppercase font-poppinsReg text-xs md:text-base lg:text-lg text-center"
+            >
+              Ingrese su número telefónico
+            </label>
+            <div className="relative w-full h-fit ">
+              <img
+                src="/img/icono-mobile.webp"
+                alt="Phone Icon"
+                className=" absolute left-2 h-full py-1 lg:py-2"
+              />
+              <Input
+                type="tel"
+                id="tel"
+                value={formatedPhone}
+                onChange={(e) => handleInputNumber(e)}
+                className=" pl-10 lg:pl-14 lg:py-6 font-medium text-lg md:text-xl lg:text-2xl placeholder:font-normal placeholder:text-base"
+                minLength={11}
+                maxLength={11}
+              />
+              <p className=" absolute mt-1 text-sm text-red-600">
+                {inputMessage}
+              </p>
+            </div>
+            <button
+              type="button"
+              className=" px-6 py-1 bg-black text-sm md:text-base text-white uppercase disabled:bg-neutral-400 disabled:text-neutral-500 rounded-full"
+              disabled={phoneInput.length !== 10}
+              onClick={() => handleAddNumber(phoneInput)}
+            >
+              Agregar
+            </button>
+          </div>
+
+          <img src="" alt="" />
+        </section>
+
+        <img
+          src="/img/logo-movistar.webp"
+          alt="Brand Logo"
+          className="w-1/2 max-w-[300px]"
+        />
+
+        <SyncSection
+          {...{
+            showSyncSection,
+            setShowSyncSection,
+            updateStatus,
+            schools,
+            isOnline,
+            hasInternet,
+          }}
+        />
+      </main>
+    </div>
   )
 }
 
@@ -272,15 +282,36 @@ const SyncSection = ({
     <section
       className={`${
         showSyncSection ? ' translate-y-0 ' : ' translate-y-full  '
-      } absolute top-0 w-full  px-4 h-full flex flex-col items-center justify-center gap-10 bg-sky-800 transition-all duration-300 ease-in-out`}
+      } absolute top-0 w-full  px-4 h-full flex flex-col items-center justify-evenly lg:gap-20 transition-all duration-300 ease-in-out`}
+      style={{
+        backgroundImage: 'url(/img/landing-bg.webp)',
+        backgroundSize: 'cover',
+      }}
     >
-      <h2 className="text-xl text-center text-white uppercase font-bold tracking-wider">
-        Sincronización de datos
-      </h2>
+      <button
+        type="button"
+        onClick={() => setShowSyncSection(false)}
+        className=" z-50 absolute top-4 right-4 bg-neutral-950 text-white rounded-sm "
+      >
+        <XSquare className={` text-white h-5 w-5 md:w-7 md:h-7 lg:w-9 lg:h-9 m-2`} />
+      </button>
+      <div className=" w-full flex flex-col items-center gap-2 lg:gap-6">
+        <img
+          src="/img/logo.webp"
+          alt="Team Gamers Logo"
+          className=" w-5/6 max-w-[350px] "
+        />
+        <p className=" text-white uppercase font-poppinsBoldItalic md:text-2xl">
+          Tu portal de gaming
+        </p>
+      </div>
 
-      <div className=" w-full max-w-[400px] px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-lg">
-        <div className=" w-full">
-          <label htmlFor="date" className="w-full mb-2 flex items-center gap-2">
+      <div className=" w-full max-w-[500px] flex flex-col items-center gap-2 ">
+        <p className=" font-poppinsReg text-center lg:text-lg text-white uppercase font-bold tracking-wider">
+          Sincronización de datos
+        </p>
+        <div className=" w-full px-4 py-6 flex flex-col items-center justify-around gap-6 bg-neutral-300 rounded-2xl">
+          <label htmlFor="date" className="w-full flex items-center gap-2">
             <CalendarCheck className="h-4 w-4 text-neutral-800" />
             <span className=" text-neutral-800">Fecha cargada</span>
           </label>
@@ -297,9 +328,10 @@ const SyncSection = ({
               )
             }}
             value={dateSync?.length ? dateSync : ''}
+            
             // disabled={!schoolSync?.length}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full md:text-lg lg:text-xl">
               <SelectValue
                 placeholder={'Seleccione el día'}
                 className="w-[180px]"
@@ -315,16 +347,15 @@ const SyncSection = ({
                     <SelectItem
                       key={index}
                       value={school.date}
-                      className=" my-2 cursor-pointer"
+                      className=" my-2 cursor-pointer rounded-md text-lg"
                       style={{
                         backgroundColor:
                           school.status === 'sended'
                             ? 'lightgreen'
                             : school.status === 'error'
                             ? 'red'
-                            : 'lightblue',
+                            : 'lightgray',
                       }}
-                      // disabled={school.status === 'sended'}
                     >
                       {school.date} -{' '}
                       {school.status === 'sended'
@@ -337,38 +368,29 @@ const SyncSection = ({
                 })}
             </SelectContent>
           </Select>
-        </div>
-      </div>
-
-      <div className=" w-full max-w-[400px]  flex items-center justify-between ">
-        <Button
-          variant="default"
-          onClick={() => setShowSyncSection(false)}
-          className=" z-50  bg-neutral-700 text-white "
-        >
-          <XSquare className={` text-white h-4 w-4 mr-2`} />
-          Cerrar/Cancelar
-        </Button>
-        {isOnline && hasInternet ? (
-          <Button
-            variant="default"
-            onClick={handleSendData}
-            disabled={numColSync.length === 0}
-            className=" z-50  bg-sky-200 text-neutral-800 hover:bg-sky-400 disabled:bg-neutral-400 disabled:text-neutral-600"
-          >
-            {numColSync.length === 0 ? 'No hay datos' : 'Enviar Datos'}
-            <SendHorizontal
-              className={`${
-                numColSync.length === 0 && 'hidden'
-              } text-neutral-800 h-4 w-4 ml-2`}
-            />
-          </Button>
-        ) : (
-          <div className=" bg-neutral-400 text-neutral-800 select-none px-6 p-2 flex items-center gap-4 rounded-md">
-            <WifiOff className={` text-neutral-800 h-4 w-4`} />
-            Sin internet
+          <div className=" w-full flex justify-end ">
+            {isOnline && hasInternet ? (
+              <button
+                type="button"
+                onClick={handleSendData}
+                disabled={numColSync.length === 0}
+                className=" z-50 px-4 py-2 flex items-center gap-4 bg-black text-white uppercase hover:bg-black disabled:bg-neutral-400 disabled:text-neutral-600 rounded-full"
+              >
+                {numColSync.length === 0 ? 'No hay datos' : 'Enviar Datos'}
+                <MoveRightIcon
+                  className={`${
+                    numColSync.length === 0 && 'hidden'
+                  } text-white w-6 `}
+                />
+              </button>
+            ) : (
+              <div className=" bg-neutral-400 text-neutral-800 select-none px-6 p-2 flex items-center gap-4 rounded-full">
+                <WifiOff className={` text-neutral-800 h-4 w-4`} />
+                Sin internet
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       <div
@@ -380,6 +402,12 @@ const SyncSection = ({
           {popupMessage}
         </p>
       </div>
+
+      <img
+        src="/img/logo-movistar.webp"
+        alt="Brand Logo"
+        className="w-1/2 max-w-[300px]"
+      />
     </section>
   )
 }
