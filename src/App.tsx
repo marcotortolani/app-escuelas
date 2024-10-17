@@ -19,7 +19,8 @@ import rc4Min from 'rc4.js'
 const rc4 = new rc4Min('appSchoolVenezuela')
 
 import syncButton from '/img/btn-sincronizar.webp'
-import noConectionImage from '/img/sin-conexion.webp'
+// import noConectionImage from '/img/sin-conexion.webp'
+import noConectionImage from './assets/img/sin-conexion.webp'
 import teamGamersLogo from '/img/logo.webp'
 import movistarLogo from '/img/logo-movistar.webp'
 import backgroundImage from '/img/landing-bg.webp'
@@ -379,7 +380,7 @@ const SyncSection = ({
                 type="button"
                 onClick={handleSendData}
                 disabled={numColSync.length === 0}
-                className=" z-50 px-4 py-2 flex items-center gap-4 bg-black text-white uppercase hover:bg-black disabled:bg-neutral-400 disabled:text-neutral-600 rounded-full"
+                className=" z-50 px-4 py-2 text-xs md:text-sm flex items-center gap-4 bg-black text-white uppercase hover:bg-black disabled:bg-neutral-400 disabled:text-neutral-600 rounded-full"
               >
                 {numColSync.length === 0 ? 'No hay datos' : 'Enviar Datos'}
                 <MoveRightIcon
@@ -389,7 +390,7 @@ const SyncSection = ({
                 />
               </button>
             ) : (
-              <div className=" bg-neutral-400 text-neutral-800 select-none px-6 p-2 flex items-center gap-4 rounded-full">
+              <div className=" bg-neutral-400 text-neutral-800 select-none px-6 p-2 text-xs md:text-sm flex items-center gap-4 rounded-full">
                 <WifiOff className={` text-neutral-800 h-4 w-4`} />
                 Sin internet
               </div>
