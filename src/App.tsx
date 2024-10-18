@@ -95,7 +95,7 @@ function App() {
           backgroundSize: 'cover',
         }}
       >
-        <div className=" z-0 absolute top-4 right-4 w-16 md:w-24 p-1 flex flex-col items-center gap-2">
+        <div className=" z-0 absolute top-12 right-4 w-16 md:w-24 p-1 flex flex-col items-center gap-2">
           {hasInternet ? (
             <button
               type="button"
