@@ -2,9 +2,15 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 // Define el tipo de datos recolectados
+
+export type NumberCollected = {
+  number: string
+  serviceID: number
+}
+
 type DataColected = {
   date: string
-  numbersCollected: string[]
+  numbersCollected: NumberCollected[]
   status: 'unsended' | 'sended' | 'error'
 }
 
@@ -35,8 +41,8 @@ type State = {
 
 // Define las acciones que mutarán el estado
 type Action = {
-  setSchoolName: (name: string) => void
-  addNumberCollected: (name: string, number: string) => void
+  setClientName: (name: string) => void
+  addNumberCollected: (name: string, number: NumberCollected) => void
   updateStatus: (date: string, status: 'unsended' | 'sended' | 'error') => void
 }
 
@@ -48,7 +54,7 @@ export const useStore = create(
       selectedSchool: '',
 
       // Acción para establecer el nombre de la escuela
-      setSchoolName: (name: string) => {
+      setClientName: (name: string) => {
         set((state) => {
           const schoolExists = state.schools.some(
             (school) => school.name === name
@@ -70,7 +76,7 @@ export const useStore = create(
       },
 
       // Acción para agregar un número a la lista de números recolectados
-      addNumberCollected: (name: string, number: string) => {
+      addNumberCollected: (name: string, number: NumberCollected) => {
         set((state) => {
           return {
             ...state,
@@ -127,7 +133,7 @@ export const useStore = create(
       },
     }),
     {
-      name: 'escuelas-store', // Nombre del almacenamiento en localStorage
+      name: 'movistar-venezuela-store', // Nombre del almacenamiento en localStorage
       storage: createJSONStorage(() => localStorage), // Usa localStorage
     }
   )
