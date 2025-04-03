@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useStore } from './store/AppStore'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
 import useNetworkStatus from './hooks/useNetworkStatus'
 import { DataSchool } from './store/AppStore'
 import {
@@ -14,8 +16,11 @@ import { Input } from '@/components/ui/input'
 import { NumberCollected } from './store/AppStore'
 
 import { WifiOff, XSquare, CalendarCheck, MoveRightIcon } from 'lucide-react'
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import rc4Min from 'rc4.js'
 const rc4 = new rc4Min('appSchoolVenezuela')
@@ -27,6 +32,7 @@ import queGuayViajesLogo from './assets/img/logo-que-guay.webp'
 import locoPorLaCocinaLogo from './assets/img/logo-loco-por-la-cocina.png'
 import movistarLogo from './assets/img/logo-movistar.webp'
 import backgroundImage from './assets/img/landing-bg.webp'
+import { Autoplay } from 'swiper/modules'
 
 const PRODUCTS = [
   {
@@ -58,6 +64,20 @@ function App() {
   const [showSyncSection, setShowSyncSection] = useState(false)
   const { isOnline, hasInternet } = useNetworkStatus()
 
+  const swiperRef = useRef<any>(null)
+
+  function pauseSwiper() {
+    if (swiperRef.current) {
+      swiperRef.current.autoplay.stop()
+    }
+  }
+
+  function resumeSwiper() {
+    if (swiperRef.current) {
+      swiperRef.current.autoplay.start()
+    }
+  }
+
   const handleAddNumber = ({
     number,
     serviceID,
@@ -83,6 +103,8 @@ function App() {
 
     setPhoneInput('')
     setFormatedPhone('')
+    setProductSelected('')
+    resumeSwiper()
 
     const actualDate = new Date().toLocaleDateString('es-ES')
     updateStatus(actualDate, 'unsended')
@@ -118,6 +140,18 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    if (swiperRef.current) {
+      const index = PRODUCTS.findIndex((p) => p.value === productSelected)
+
+      if (index !== -1) {
+        swiperRef.current.slideTo(index) // Mueve el Swiper al índice seleccionado
+      }
+    }
+    if (productSelected === '') return
+    pauseSwiper()
+  }, [productSelected])
+
   return (
     <div className=" w-screen bg-black ">
       <main
@@ -127,7 +161,7 @@ function App() {
           backgroundSize: 'cover',
         }}
       >
-        <div className=" z-0 absolute top-12 right-4 w-16 md:w-24 p-1 flex flex-col items-center gap-2">
+        <div className=" z-10 absolute top-12 right-4 w-16 md:w-24 p-1 flex flex-col items-center gap-2">
           {hasInternet ? (
             <button
               type="button"
@@ -142,62 +176,92 @@ function App() {
             </div>
           )}
         </div>
-        <div className=" w-full flex flex-col items-center gap-2 lg:gap-6">
-          {/* <div className="w-5/6 max-w-[350px] p-2 aspect-[8/4]">
-            {productSelected === 'team-gamers' && (
-              <img
-                src={teamGamersLogo}
-                alt="Team Gamers Logo"
-                className=" w-auto h-full mx-auto"
-              />
-            )}
-            {productSelected === 'loco-por-la-cocina' && (
+        <div className="absolute z-0 top-10 left-0 right-0 w-screen flex flex-col items-center gap-2 lg:gap-6">
+          {/* Imagenes logos en gris, se activan en color */}
+          {/* <div
+            className={`${
+              productSelected === '' ? '' : ' '
+            }  w-full max-w-[350px] grid grid-cols-3  mt-10 gap-2  `}
+          >
+            <button
+              type="button"
+              onClick={() => setProductSelected('loco-por-la-cocina')}
+              className={`${
+                productSelected === 'loco-por-la-cocina'
+                  ? 'scale-125 z-50'
+                  : ' scale-90 grayscale'
+              }  w-5/6 h-full mx-auto transition-all duration-200 ease-in-out  `}
+            >
               <img
                 src={locoPorLaCocinaLogo}
                 alt="Locos por la Cocina Logo"
-                className=" w-auto h-full mx-auto"
-              />
-            )}
-            {productSelected === 'que-guay-viajes' && (
-              <img
-                src={queGuayViajesLogo}
-                alt="Que Guay Viajes Logo"
-                className=" p-4 w-auto h-full mx-auto"
-              />
-            )}
-          </div> */}
-
-          {/* Imagenes logos en gris, se activan en color */}
-          <div className="w-full max-w-[350px] flex items-center mt-10 ">
-            <button
-              type="button"
-              onClick={() => setProductSelected('team-gamers')}
-              className={`${
-                productSelected === 'team-gamers'
-                  ? ''
-                  : ' scale-90 grayscale brightness-75'
-              } w-5/6 h-auto scale-125 transition-all duration-200 ease-in-out`}
-            >
-              <img
-                src={teamGamersLogo}
-                alt="Team Gamers Logo"
-                className=" w-full h-full"
+                className=" w-full h-auto"
               />
             </button>
-
             <button
               type="button"
               onClick={() => setProductSelected('que-guay-viajes')}
               className={`${
                 productSelected === 'que-guay-viajes'
-                  ? ''
+                  ? ' scale-150 z-50 '
                   : ' scale-110 grayscale'
-              } px-4 w-full h-auto scale-150 transition-all duration-200 ease-in-out`}
+              } w-5/6 h-full  mx-auto transition-all duration-200 ease-in-out `}
             >
               <img
                 src={queGuayViajesLogo}
                 alt="Que Guay Viajes Logo"
-                className=" w-full h-full"
+                className=" w-full h-auto"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => setProductSelected('team-gamers')}
+              className={`${
+                productSelected === 'team-gamers'
+                  ? 'scale-125 z-50'
+                  : ' scale-90 grayscale brightness-75'
+              } w-5/6 h-full mx-auto transition-all duration-200 ease-in-out `}
+            >
+              <img
+                src={teamGamersLogo}
+                alt="Team Gamers Logo"
+                className=" w-full h-auto"
+              />
+            </button>
+          </div> */}
+          {/* <div
+            className={`${
+              productSelected === '' ? '' : ' '
+            }  w-full max-w-[350px] grid grid-cols-2 grid-rows-2 mt-10 gap-0 `}
+          >
+            <button
+              type="button"
+              onClick={() => setProductSelected('que-guay-viajes')}
+              className={`${
+                productSelected === 'que-guay-viajes'
+                  ? ' scale-150 z-50 '
+                  : ' scale-110 grayscale'
+              } w-1/2 h-full col-span-2 mx-auto transition-all duration-200 ease-in-out `}
+            >
+              <img
+                src={queGuayViajesLogo}
+                alt="Que Guay Viajes Logo"
+                className=" w-full h-auto"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => setProductSelected('team-gamers')}
+              className={`${
+                productSelected === 'team-gamers'
+                  ? 'scale-110 z-50'
+                  : ' scale-90 grayscale brightness-75'
+              } w-4/5 h-full col-span-1 mx-auto transition-all duration-200 ease-in-out `}
+            >
+              <img
+                src={teamGamersLogo}
+                alt="Team Gamers Logo"
+                className=" w-full h-auto"
               />
             </button>
 
@@ -206,23 +270,89 @@ function App() {
               onClick={() => setProductSelected('loco-por-la-cocina')}
               className={`${
                 productSelected === 'loco-por-la-cocina'
-                  ? ''
+                  ? 'scale-100 z-50'
                   : ' scale-90 grayscale'
-              }  w-5/6 h-auto scale-125 transition-all duration-200 ease-in-out`}
+              }  w-5/6 h-full mx-auto transition-all duration-200 ease-in-out `}
             >
               <img
                 src={locoPorLaCocinaLogo}
                 alt="Locos por la Cocina Logo"
-                className=" w-full h-full"
+                className=" w-full h-auto"
               />
             </button>
-          </div>
+          </div> */}
+
+          <Swiper
+            // ref={swiperRef}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper
+            }}
+            slidesPerView={2.1}
+            centeredSlides={true}
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            spaceBetween={30}
+            // loop={true}
+
+            pagination={{
+              clickable: true,
+            }}
+            // navigation={true}
+            modules={[Autoplay]}
+            direction="horizontal"
+            // dir="rtl"
+            className="relative mySwiper h-40 w-full max-w-[350px] flex items-center mt-10 "
+            // onSlideChange={(swiper) => {
+            //   console.log(swiper.realIndex + 1)
+            //   setProductSelected(PRODUCTS[swiper.realIndex].value)
+            // }}
+          >
+            <SwiperSlide className=" w-full h-full flex items-center">
+              <img
+                src={queGuayViajesLogo}
+                alt="Que Guay Viajes Logo"
+                className={`${
+                  productSelected === 'que-guay-viajes'
+                    ? 'scale-100'
+                    : ' scale-100 grayscale'
+                } w-auto h-4/6 ml-2 mx-auto`}
+                onClick={() => setProductSelected('que-guay-viajes')}
+              />
+            </SwiperSlide>
+            <SwiperSlide className=" w-full h-full flex items-center">
+              <img
+                src={locoPorLaCocinaLogo}
+                alt="Locos por la Cocina Logo"
+                className={` ${
+                  productSelected === 'loco-por-la-cocina'
+                    ? 'scale-100'
+                    : ' scale-100 grayscale'
+                } w-auto h-full mx-auto`}
+                onClick={() => setProductSelected('loco-por-la-cocina')}
+              />
+            </SwiperSlide>
+            <SwiperSlide className=" w-full h-full flex items-center">
+              <img
+                src={teamGamersLogo}
+                alt="Team Gamers Logo"
+                className={`${
+                  productSelected === 'team-gamers'
+                    ? 'scale-100 '
+                    : ' scale-100 grayscale brightness-75 '
+                } w-auto h-4/5 mx-auto`}
+                onClick={() => setProductSelected('team-gamers')}
+              />
+            </SwiperSlide>
+          </Swiper>
 
           {/* <p className=" text-white uppercase font-poppinsBoldItalic md:text-2xl">
             Tu portal de gaming
           </p> */}
         </div>
-        <section className="w-full min-h-fit max-h-[500px] flex flex-col items-center gap-3">
+        <section className="w-full mt-48 min-h-fit max-h-[500px] flex flex-col items-center gap-3">
           <p className=" w-full max-w-[500px]  px-2 font-white font-poppinsReg text-white uppercase text-[0.65rem] md:text-sm lg:text-base">
             Déjanos tu teléfono y, si eres cliente Movistar, en las próximas
             horas estarás disfrutando de 20 días sin costo de la opción de
@@ -281,6 +411,8 @@ function App() {
               </select> */}
               <Select
                 onValueChange={(value) => setProductSelected(value)}
+                name="products"
+                value={productSelected}
                 defaultValue={''}
               >
                 <SelectTrigger className=" w-full text-neutral-800 uppercase font-poppinsReg text-xs md:text-base lg:text-lg text-left">
@@ -321,8 +453,6 @@ function App() {
               Agregar
             </button>
           </div>
-
-          <img src="" alt="" />
         </section>
 
         <img
@@ -447,7 +577,7 @@ const SyncSection = ({
     <section
       className={`${
         showSyncSection ? ' translate-y-0 ' : ' translate-y-full  '
-      } absolute top-0 w-full px-4 h-full flex flex-col items-center justify-evenly lg:gap-20 transition-all duration-300 ease-in-out`}
+      } absolute z-30 top-0 w-full px-4 h-full flex flex-col items-center justify-evenly lg:gap-20 transition-all duration-300 ease-in-out`}
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
